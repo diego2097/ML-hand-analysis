@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 import pandas as pd
 from tensorflow import keras
+import tensorflow as tf
 
 def create_image_array(x_max,y_max,data):
     # Zero pad images and obtain an array to work upon
@@ -43,12 +44,13 @@ print(len(class_names))
 images_list = os.listdir("images")
 train_x_max, train_y_max, train_data, image_paths_train = get_maximum_dimensions(images_list)
 train_images = create_image_array(train_x_max,train_y_max,train_data)
-train_labels = [[7,6,8,9,17,19],[0,1,8,17]]
+train_images = train_images / 255.0
+#train_labels = np.array([[7,6,8,9,17,19],[0,1,8,17]])
+train_labels = np.array([1,2], )
+ 
 ## Dimensions of the images
-print(train_images.shape)
-
 model = keras.Sequential([
-    keras.layers.Flatten(input_shape=(2304, 4608,3)),
+    keras.layers.Flatten(input_shape=(2240, 4608,3)),
     keras.layers.Dense(128, activation='relu'),
     keras.layers.Dense(len(class_names), activation='softmax')
 ])
@@ -58,7 +60,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 
-model.fit(train_images, train_labels, epochs=10)
+#model.fit(train_images, train_labels, epochs=10)
 
 #image = Image.open("images/" + images_list[0])
 # pad the images 
